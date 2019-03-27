@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+   <bean id="guest1" class="com.xiaobai.guest.Guest1"/>
+   <bean id="guest2" class="com.xiaobai.guest.Guest2"/>
+   <bean id="guest3" class="com.xiaobai.guest.Guest3"/>
+   <bean id="server" class="com.xiaobai.server.Server"/>
+
+   <aop:config>
+      <aop:aspect ref="server">
+         <aop:pointcut id="eat" expression="execution(* com.xiaobai.guest.Guest.eat(..)) and !bean(guest2)"/>
+         <!--<aop:before pointcut-ref="eat" method="greet"/>
+         <aop:after-returning pointcut-ref="eat" method="cleanTable" />
+         <aop:after-throwing pointcut-ref="eat" method="apologize"/>-->
+         <aop:around pointcut-ref="eat" method="server"/>
+      </aop:aspect>
+      <aop:aspect ref="server">
+         <aop:pointcut id="pay" expression="execution(* com.xiaobai.guest.Guest.pay(int)) and args(money)"/>
+         <aop:after-returning pointcut-ref="pay" method="receiveMoney"/>
+      </aop:aspect>
+   </aop:config>
+</beans>
